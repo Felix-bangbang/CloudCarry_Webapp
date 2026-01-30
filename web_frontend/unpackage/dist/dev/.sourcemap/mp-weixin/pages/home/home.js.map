@@ -1,1 +1,0 @@
-{"version":3,"file":"home.js","sources":["pages/home/home.vue?type=page"],"sourcesContent":["import MiniProgramPage from '/Users/fvinci6/Documents/HBuilderProjects/CloudCarry/frontend_pack/pages/home/home.vue'\nwx.createPage(MiniProgramPage)"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;AACA,GAAG,WAAW,eAAe;"}
