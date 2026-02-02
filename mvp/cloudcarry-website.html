@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudCarry - Students Carrying</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cloud-blue: #3B9FD9;
+            --cloud-teal: #4FA8A1;
+            --cloud-orange: #F39C3F;
+            --cloud-warm: #E5955A;
+            --deep-navy: #0A1628;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #fff;
+            background: #000;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated gradient mesh background */
+        .bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at 20% 50%, rgba(59, 159, 217, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 50%, rgba(243, 156, 63, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 100%, rgba(79, 168, 161, 0.1) 0%, transparent 50%),
+                        linear-gradient(180deg, #0A1628 0%, #000814 100%);
+            animation: breathe 8s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Floating orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--cloud-blue);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--cloud-orange);
+            top: 50%;
+            right: 10%;
+            animation-delay: 5s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: var(--cloud-teal);
+            bottom: 10%;
+            left: 30%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(50px, -80px) scale(1.1);
+            }
+            66% {
+                transform: translate(-30px, 50px) scale(0.9);
+            }
+        }
+
+        /* Grid overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(59, 159, 217, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 159, 217, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 22, 40, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(59, 159, 217, 0.2);
+            z-index: 1000;
+            animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo img {
+            height: 55px;
+            width: auto;
+            filter: drop-shadow(0 0 20px rgba(59, 159, 217, 0.4));
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cloud-blue), var(--cloud-orange));
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::before {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--cloud-blue);
+        }
+
+        .nav-cta {
+            padding: 0.75rem 1.8rem;
+            background: linear-gradient(135deg, var(--cloud-blue), var(--cloud-teal));
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 0 30px rgba(59, 159, 217, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(59, 159, 217, 0.6);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 120px;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 5.5rem;
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 2rem;
+            color: #fff;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--cloud-blue), var(--cloud-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+        }
+
+        .gradient-text::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--cloud-blue), var(--cloud-orange));
+            border-radius: 3px;
+            opacity: 0.5;
+        }
+
+        .hero-text p {
+            font-size: 1.35rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+            font-weight: 300;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+        }
+
+        .btn {
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            border: none;
+            font-size: 1.05rem;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--cloud-blue), var(--cloud-teal));
+            color: white;
+            box-shadow: 0 20px 60px rgba(59, 159, 217, 0.4);
+            position: relative;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 70px rgba(59, 159, 217, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--cloud-blue);
+            background: rgba(59, 159, 217, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* 3D Card with glassmorphism */
+        .hero-visual {
+            position: relative;
+            animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
+            perspective: 1000px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 30px 90px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px) rotateX(2deg);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cloud-blue), var(--cloud-orange));
+        }
+
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(59, 159, 217, 0.1) 0%, transparent 70%);
+            animation: glow 8s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.3; transform: rotate(0deg); }
+            50% { opacity: 0.6; transform: rotate(180deg); }
+        }
+
+        .stat {
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat:last-child {
+            margin-bottom: 0;
+        }
+
+        .stat-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--cloud-blue), var(--cloud-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 30px rgba(59, 159, 217, 0.3);
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.05rem;
+            font-weight: 300;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 10rem 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 6rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background: rgba(59, 159, 217, 0.1);
+            border: 1px solid rgba(59, 159, 217, 0.3);
+            border-radius: 50px;
+            color: var(--cloud-blue);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .section-header p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            padding: 3rem;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(59, 159, 217, 0.1), rgba(243, 156, 63, 0.1));
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: rgba(59, 159, 217, 0.3);
+            box-shadow: 
+                0 30px 80px rgba(59, 159, 217, 0.3),
+                0 0 0 1px rgba(59, 159, 217, 0.2);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--cloud-blue), var(--cloud-warm));
+            box-shadow: 0 15px 40px rgba(59, 159, 217, 0.3);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 20px 50px rgba(59, 159, 217, 0.5);
+        }
+
+        .feature-card:nth-child(2) .feature-icon {
+            background: linear-gradient(135deg, var(--cloud-blue), var(--cloud-warm));
+        }
+
+        .feature-card:nth-child(3) .feature-icon {
+            background: linear-gradient(135deg, var(--cloud-blue), var(--cloud-warm));
+        }
+
+        .feature-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* How It Works with animated connection lines */
+        .how-it-works {
+            padding: 10rem 0;
+            position: relative;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .steps {
+            display: grid;
+            gap: 4rem;
+            margin-top: 5rem;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            left: 40px;
+            top: 80px;
+            bottom: 80px;
+            width: 2px;
+            background: linear-gradient(180deg, 
+                var(--cloud-blue) 0%,
+                var(--cloud-teal) 33%,
+                var(--cloud-warm) 66%,
+                var(--cloud-orange) 100%);
+            animation: lineGrow 2s ease-out;
+        }
+
+        @keyframes lineGrow {
+            from { height: 0; }
+            to { height: 100%; }
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 3rem;
+            align-items: start;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cloud-blue), var(--cloud-orange));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            box-shadow: 0 15px 50px rgba(59, 159, 217, 0.4);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover .step-number {
+            transform: scale(1.15) rotate(10deg);
+            box-shadow: 0 20px 60px rgba(59, 159, 217, 0.6);
+        }
+
+        .step-content {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+
+        .step-content:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(59, 159, 217, 0.3);
+            transform: translateX(10px);
+        }
+
+        .step-content h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .step-content p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Impact Section with animated icons */
+        .impact {
+            padding: 10rem 0;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 5rem;
+        }
+
+        .impact-card {
+            text-align: center;
+            padding: 3.5rem 2.5rem;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .impact-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(59, 159, 217, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .impact-card:hover::after {
+            opacity: 1;
+        }
+
+        .impact-card:hover {
+            transform: translateY(-20px);
+            border-color: rgba(59, 159, 217, 0.3);
+            box-shadow: 0 40px 100px rgba(59, 159, 217, 0.3);
+        }
+
+        .impact-icon {
+            font-size: 4.5rem;
+            margin-bottom: 2rem;
+            display: inline-block;
+            transition: all 0.5s ease;
+            filter: drop-shadow(0 0 20px rgba(59, 159, 217, 0.3));
+        }
+
+        .impact-card:hover .impact-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .impact-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .impact-card p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        /* Mega CTA with animated gradient */
+        .cta-section {
+            padding: 10rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(59, 159, 217, 0.1), rgba(243, 156, 63, 0.1));
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: conic-gradient(
+                from 0deg at 50% 50%,
+                rgba(59, 159, 217, 0.1) 0deg,
+                transparent 60deg,
+                transparent 120deg,
+                rgba(243, 156, 63, 0.1) 180deg,
+                transparent 240deg,
+                transparent 300deg,
+                rgba(59, 159, 217, 0.1) 360deg
+            );
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-section h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
+        }
+
+        .cta-section p {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section .btn-primary {
+            background: white;
+            color: var(--deep-navy);
+            font-size: 1.2rem;
+            padding: 1.5rem 3rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 20px 60px rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-section .btn-primary:hover {
+            box-shadow: 0 30px 80px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Footer with glassmorphism */
+        footer {
+            background: rgba(10, 22, 40, 0.8);
+            backdrop-filter: blur(20px);
+            color: white;
+            padding: 5rem 0 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-about img {
+            height: 45px;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 15px rgba(59, 159, 217, 0.3));
+        }
+
+        .footer-about p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--cloud-blue);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.8rem;
+            transition: all 0.3s ease;
+            font-size: 1.05rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--cloud-orange);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.05rem;
+        }
+
+        /* Scroll reveal animations */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero-text h1 {
+                font-size: 4rem;
+            }
+            
+            .section-header h2 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+
+            .features-grid,
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+
+            .cta-section h2 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-text p {
+                font-size: 1.1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .cta-section h2 {
+                font-size: 2.5rem;
+            }
+
+            .stat-number {
+                font-size: 3rem;
+            }
+        }
+
+        /* Custom cursor effect */
+        .cursor-glow {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 159, 217, 0.3), transparent);
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background elements -->
+    <div class="bg-canvas"></div>
+    <div class="grid-overlay"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <img src="cloudcarry.png" alt="CloudCarry Logo">
+            </div>
+            <ul class="nav-links">
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#impact">Impact</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#join" class="nav-cta">Join Now</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>
+                        <span class="gradient-text">Students carrying</span>without the carbon cost
+                    </h1>
+                    <p>
+                        Transform unused luggage space into a trusted peer-support network. 
+                        Move essential items quickly, affordably, and sustainably between students who are already traveling.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="#join" class="btn btn-primary">Get Started Free</a>
+                        <a href="#how-it-works" class="btn btn-secondary">Watch Demo</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="glass-card">
+                        <div class="stat">
+                            <div class="stat-number">€40+</div>
+                            <div class="stat-label">Average savings per delivery</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">Zero</div>
+                            <div class="stat-label">New courier journeys created</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">University-verified community</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag">Why CloudCarry</span>
+                <h2>Built for Students, By Students</h2>
+                <p>A revolutionary platform that makes logistics human-centered, affordable, and sustainable</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card scroll-reveal">
+                    <div class="feature-icon">🎓</div>
+                    <h3>Student-First Design</h3>
+                    <p>Built around real student needs with affordable pricing that respects limited budgets. Get support when it matters most — before exams, visa appointments, and critical deadlines.</p>
+                </div>
+                <div class="feature-card scroll-reveal">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Trusted & Secure</h3>
+                    <p>University-verified access only with clear item restrictions. In-person handovers with open inspection and digital paper trails for every single transaction.</p>
+                </div>
+                <div class="feature-card scroll-reveal">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Zero Carbon Impact</h3>
+                    <p>No new journeys created, reduced packaging waste, and better use of existing transport capacity. Making sustainability part of everyday student life.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag">The Process</span>
+                <h2>How CloudCarry Works</h2>
+                <p>Simple, transparent, and built for trust</p>
+            </div>
+            <div class="steps">
+                <div class="step scroll-reveal">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>List Your Journey</h3>
+                        <p>Verified Trinity students share upcoming travel plans — Dublin to London, home for holidays, or anywhere between. If you have spare luggage capacity, you can help a fellow student while earning extra income.</p>
+                    </div>
+                </div>
+                <div class="step scroll-reveal">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Smart Matching</h3>
+                        <p>Senders select from approved item categories like documents, clothing, or books. Our platform suggests fair pricing automatically, and payment is held securely in escrow until successful delivery.</p>
+                    </div>
+                </div>
+                <div class="step scroll-reveal">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Safe Handover</h3>
+                        <p>Meet in person for an open-box inspection before departure. No sealed packages, no surprises. Travel with the item using your existing journey — zero extra carbon footprint.</p>
+                    </div>
+                </div>
+                <div class="step scroll-reveal">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Confirm & Complete</h3>
+                        <p>Both parties confirm successful delivery through the app. Payment is instantly released to the carrier, and both students can rate their experience to build community trust scores.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section id="impact" class="impact">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag">Our Mission</span>
+                <h2>Creating Lasting Impact</h2>
+                <p>Building community resilience, one journey at a time</p>
+            </div>
+            <div class="impact-grid">
+                <div class="impact-card scroll-reveal">
+                    <div class="impact-icon">💚</div>
+                    <h3>Student Wellbeing</h3>
+                    <p>Dramatically reducing financial strain from expensive courier fees. Minimizing anxiety around time-sensitive deliveries and supporting academic continuity for international students.</p>
+                </div>
+                <div class="impact-card scroll-reveal">
+                    <div class="impact-icon">🤝</div>
+                    <h3>Community Strength</h3>
+                    <p>Encouraging meaningful mutual support among students worldwide. Building trust-based peer networks that strengthen inclusion for migrant and international communities.</p>
+                </div>
+                <div class="impact-card scroll-reveal">
+                    <div class="impact-icon">🌱</div>
+                    <h3>Planet Protection</h3>
+                    <p>Eliminating unnecessary courier vans and last-mile deliveries. Reducing cardboard and plastic packaging waste while maximizing utilization of existing transport infrastructure.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mega CTA Section -->
+    <section id="join" class="cta-section">
+        <div class="container">
+            <h2>Ready to Join the Movement?</h2>
+            <p>Be part of a revolutionary model of community-powered infrastructure. Starting at Trinity College Dublin, expanding globally.</p>
+            <a href="#signup" class="btn btn-primary">Sign Up for Early Access →</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="about">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <img src="cloudcarry.png" alt="CloudCarry">
+                    <p>A student-powered, low-carbon delivery network designed to support international students and migrant communities. Born at Trinity College Dublin, built for global impact.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#safety">Safety & Trust</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#carriers">For Carriers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#impact">Our Impact</a></li>
+                        <li><a href="#partners">Partners</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#faq">Help Center</a></li>
+                        <li><a href="#guidelines">Guidelines</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CloudCarry. Logistics that serve people, not just commerce.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Scroll reveal animations
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax effect on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const orbs = document.querySelectorAll('.orb');
+            orbs.forEach((orb, index) => {
+                const speed = 0.5 + (index * 0.1);
+                orb.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Add stagger delay to scroll reveals
+        document.querySelectorAll('.features-grid .feature-card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.1}s`;
+        });
+
+        document.querySelectorAll('.impact-grid .impact-card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.15}s`;
+        });
+
+        document.querySelectorAll('.steps .step').forEach((step, index) => {
+            step.style.transitionDelay = `${index * 0.1}s`;
+        });
+    </script>
+</body>
+</html>
