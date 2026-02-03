@@ -305,27 +305,9 @@
             border: none;
             font-size: 1.05rem;
             letter-spacing: 0.3px;
-            position: relative;
-            overflow: hidden;
         }
 
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
-        }
 
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--cloud-blue), var(--cloud-teal));
@@ -335,8 +317,11 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 25px 70px rgba(59, 159, 217, 0.5);
+            transform: translateY(-4px) scale(1.02);
+            background: linear-gradient(135deg, #4DB4F0, #5EB8B0);
+            box-shadow: 
+                0 30px 80px rgba(59, 159, 217, 0.6),
+                0 0 30px rgba(59, 159, 217, 0.3);
         }
 
         .btn-secondary {
@@ -348,8 +333,11 @@
 
         .btn-secondary:hover {
             border-color: var(--cloud-blue);
-            background: rgba(59, 159, 217, 0.1);
-            transform: translateY(-3px);
+            background: rgba(59, 159, 217, 0.15);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 
+                0 15px 40px rgba(59, 159, 217, 0.3),
+                inset 0 0 20px rgba(59, 159, 217, 0.1);
         }
 
         /* 3D Card with glassmorphism */
@@ -800,7 +788,11 @@
         }
 
         .cta-section .btn-primary:hover {
-            box-shadow: 0 30px 80px rgba(255, 255, 255, 0.3);
+            transform: translateY(-4px) scale(1.02);
+            background: #f5f5f5;
+            box-shadow: 
+                0 30px 80px rgba(255, 255, 255, 0.4),
+                0 0 30px rgba(255, 255, 255, 0.2);
         }
 
         /* Footer with glassmorphism */
