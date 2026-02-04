@@ -122,9 +122,6 @@
 
         /* Navigation */
         nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
             background: rgba(10, 22, 40, 0.7);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(59, 159, 217, 0.2);
@@ -226,11 +223,10 @@
 
         /* Hero Section */
         .hero {
-            min-height: 100vh;
+            min-height: calc(100vh - 200px);
             display: flex;
             align-items: center;
             position: relative;
-            padding-top: 120px;
             overflow: hidden;
         }
 
